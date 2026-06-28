@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReguForge – Unified Compliance & Integration Platform</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --ink:    #07090F;
+    --deep:   #0D1117;
+    --panel:  #111827;
+    --border: #1E2D40;
+    --muted:  #374151;
+    --slate:  #8B9AB3;
+    --body:   #CBD5E1;
+    --white:  #F0F4FF;
+    --teal:   #00D4AA;
+    --teal2:  #00A884;
+    --warn:   #F59E0B;
+    --red:    #EF4444;
+    --green:  #10B981;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--deep);
+    color: var(--body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 5%;
+    background: rgba(7,9,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.875rem; font-weight: 500;
+    color: var(--slate); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--teal); color: var(--ink);
+    padding: 9px 22px; border-radius: 6px;
+    font-size: 0.875rem; font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--teal2); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 65% 50%, rgba(0,212,170,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--teal);
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.2);
+    padding: 6px 14px; border-radius: 4px;
+    margin-bottom: 28px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--teal); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 800; line-height: 1.1;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal); }
+
+  .hero-sub {
+    font-size: 1.1rem; font-weight: 300;
+    color: var(--slate); line-height: 1.7;
+    max-width: 480px; margin-bottom: 40px;
+  }
+
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--teal); color: var(--ink);
+    padding: 14px 28px; border-radius: 7px;
+    font-size: 0.95rem; font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 0 0 rgba(0,212,170,0);
+  }
+  .btn-primary:hover {
+    background: var(--teal2); transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,212,170,0.25);
+  }
+  .btn-ghost {
+    background: transparent; color: var(--white);
+    padding: 14px 28px; border-radius: 7px;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--slate); color: var(--white); }
+
+  .hero-trust {
+    display: flex; align-items: center; gap: 16px;
+    margin-top: 32px;
+  }
+  .trust-badges { display: flex; gap: 8px; }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--slate);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 3px;
+  }
+  .trust-divider { width: 1px; height: 20px; background: var(--border); }
+  .trust-text { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── SIGNAL FEED (hero right) ── */
+  .signal-panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .signal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,212,170,0.03);
+  }
+  .signal-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem; color: var(--teal);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .live-dot {
+    width: 6px; height: 6px; background: var(--teal); border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  .signal-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--slate);
+  }
+  .feed-wrap {
+    height: 340px; overflow: hidden; position: relative;
+  }
+  .feed-wrap::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+    background: linear-gradient(transparent, var(--panel));
+    pointer-events: none; z-index: 2;
+  }
+  .feed { padding: 0; animation: scroll-feed 28s linear infinite; }
+  @keyframes scroll-feed {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+  .feed-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(30,45,64,0.5);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    transition: background 0.15s;
+  }
+  .feed-item:hover { background: rgba(0,212,170,0.03); }
+  .feed-time { color: var(--muted); white-space: nowrap; min-width: 58px; }
+  .feed-icon { font-size: 0.9rem; }
+  .feed-body { flex: 1; }
+  .feed-label { color: var(--body); line-height: 1.4; }
+  .feed-meta { color: var(--muted); font-size: 0.65rem; margin-top: 2px; }
+  .tag {
+    display: inline-block;
+    padding: 1px 7px; border-radius: 3px;
+    font-size: 0.62rem; font-weight: 500;
+    margin-left: 6px; vertical-align: middle;
+  }
+  .tag-ok { background: rgba(16,185,129,0.12); color: var(--green); }
+  .tag-warn { background: rgba(245,158,11,0.12); color: var(--warn); }
+  .tag-block { background: rgba(239,68,68,0.12); color: var(--red); }
+  .tag-info { background: rgba(0,212,170,0.1); color: var(--teal); }
+
+  .signal-footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .conn-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--slate);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .conn-dots { display: flex; gap: 4px; }
+  .conn-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--teal);
+    opacity: 0.4;
+  }
+  .conn-dot:nth-child(1) { opacity: 1; }
+  .conn-dot:nth-child(2) { opacity: 0.7; animation: blink 2s 0.4s infinite; }
+  .conn-dot:nth-child(3) { opacity: 0.5; animation: blink 2s 0.8s infinite; }
+  .conn-dot:nth-child(4) { opacity: 0.3; animation: blink 2s 1.2s infinite; }
+  @keyframes blink { 0%,100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+  .risk-score {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--green);
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.2);
+    padding: 4px 10px; border-radius: 4px;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 5%;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .stat {
+    text-align: center; padding: 0 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem; font-weight: 800;
+    color: var(--white); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-num span { color: var(--teal); }
+  .stat-label { font-size: 0.8rem; color: var(--slate); }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 90px 5%; }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 14px;
+  }
+  .section-h {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--white); letter-spacing: -0.025em;
+    margin-bottom: 18px;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--slate);
+    max-width: 520px; line-height: 1.7;
+  }
+
+  /* ── DELIVERY MODES ── */
+  .modes-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin-top: 52px;
+  }
+  .mode-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 32px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+  .mode-card:hover { border-color: rgba(0,212,170,0.35); transform: translateY(-3px); }
+  .mode-card.primary::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+  }
+  .mode-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--teal); background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.15);
+    padding: 3px 10px; border-radius: 3px;
+    display: inline-block; margin-bottom: 18px;
+  }
+  .mode-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem; font-weight: 800;
+    color: var(--white); margin-bottom: 12px;
+  }
+  .mode-card p { font-size: 0.9rem; color: var(--slate); line-height: 1.65; margin-bottom: 22px; }
+  .mode-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .mode-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.85rem; color: var(--body);
+  }
+  .mode-features li::before {
+    content: '→';
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--teal); font-size: 0.8rem; flex-shrink: 0; margin-top: 1px;
+  }
+  .mode-price {
+    margin-top: 24px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem; color: var(--slate);
+  }
+  .mode-price strong { color: var(--teal); font-size: 1rem; }
+
+  /* ── ARCHITECTURE ── */
+  .arch-section { background: var(--ink); }
+  .arch-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; margin-top: 52px;
+  }
+  .arch-cell {
+    background: var(--panel); padding: 28px 26px;
+    transition: background 0.2s;
+  }
+  .arch-cell:hover { background: rgba(0,212,170,0.03); }
+  .arch-icon {
+    font-size: 1.6rem; margin-bottom: 14px;
+    display: block;
+  }
+  .arch-cell h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--white); margin-bottom: 10px;
+  }
+  .arch-cell p { font-size: 0.83rem; color: var(--slate); line-height: 1.6; }
+  .arch-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--teal);
+    background: rgba(0,212,170,0.06);
+    border: 1px solid rgba(0,212,170,0.12);
+    padding: 3px 8px; border-radius: 3px;
+    display: inline-block; margin-top: 10px;
+  }
+
+  /* ── PRICING ── */
+  .pricing-section { background: var(--deep); }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; margin-top: 52px;
+  }
+  .price-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 32px;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .price-card:hover { transform: translateY(-4px); border-color: var(--muted); }
+  .price-card.featured {
+    border-color: var(--teal);
+    background: linear-gradient(160deg, rgba(0,212,170,0.06) 0%, var(--panel) 60%);
+  }
+  .price-card.featured::before {
+    content: 'Most Popular';
+    position: absolute; top: 16px; right: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--teal); background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.2);
+    padding: 3px 9px; border-radius: 3px;
+  }
+  .price-tier {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--slate); margin-bottom: 10px;
+  }
+  .price-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800;
+    color: var(--white); margin-bottom: 16px;
+  }
+  .price-amount {
+    margin-bottom: 8px;
+  }
+  .price-amount .amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem; font-weight: 800;
+    color: var(--white); letter-spacing: -0.03em;
+  }
+  .price-amount .period {
+    font-size: 0.85rem; color: var(--slate);
+  }
+  .price-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 24px; }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .price-features li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 0.83rem; color: var(--body);
+  }
+  .price-features li .check { color: var(--green); font-size: 0.85rem; flex-shrink: 0; margin-top: 1px; }
+  .price-features li.muted-feat { color: var(--muted); }
+  .price-features li.muted-feat .check { color: var(--muted); }
+  .price-btn {
+    display: block; text-align: center; text-decoration: none;
+    padding: 12px; border-radius: 7px;
+    font-size: 0.88rem; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .price-btn-primary {
+    background: var(--teal); color: var(--ink);
+  }
+  .price-btn-primary:hover { background: var(--teal2); transform: translateY(-1px); }
+  .price-btn-ghost {
+    background: transparent; color: var(--white);
+    border: 1px solid var(--border);
+  }
+  .price-btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── AI GOV ── */
+  .gov-section { background: var(--ink); }
+  .gov-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 0; }
+  .gov-visual {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px;
+  }
+  .gov-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid rgba(30,45,64,0.5);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+  }
+  .gov-row:last-child { border-bottom: none; }
+  .gov-key { color: var(--slate); }
+  .gov-val { color: var(--white); }
+  .gov-bar-wrap { width: 120px; height: 6px; background: var(--muted); border-radius: 3px; position: relative; }
+  .gov-bar { height: 100%; border-radius: 3px; }
+  .gov-bar-green { background: var(--green); }
+  .gov-bar-warn { background: var(--warn); }
+  .gov-bar-red { background: var(--red); }
+  .gov-list { display: flex; flex-direction: column; gap: 18px; margin-top: 36px; }
+  .gov-item { display: flex; gap: 16px; align-items: flex-start; }
+  .gov-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--teal);
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.15);
+    padding: 4px 9px; border-radius: 4px;
+    white-space: nowrap; margin-top: 2px;
+  }
+  .gov-item h4 {
+    font-size: 0.95rem; font-weight: 600;
+    color: var(--white); margin-bottom: 4px;
+  }
+  .gov-item p { font-size: 0.83rem; color: var(--slate); }
+
+  /* ── DEPLOYMENT ── */
+  .deploy-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-top: 52px;
+  }
+  .deploy-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 24px;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .deploy-card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-2px); }
+  .deploy-icon { font-size: 2rem; margin-bottom: 14px; }
+  .deploy-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--white); margin-bottom: 8px;
+  }
+  .deploy-card p { font-size: 0.78rem; color: var(--slate); line-height: 1.55; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center; padding: 90px 5%;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 50% 100%, rgba(0,212,170,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section .section-h { max-width: 600px; margin: 0 auto 16px; }
+  .cta-section .section-sub { margin: 0 auto 36px; }
+  .cta-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .cta-note { margin-top: 18px; font-size: 0.78rem; color: var(--muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 800;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--teal); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 0.82rem; color: var(--slate); text-decoration: none; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-size: 0.78rem; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 100px; }
+    .signal-panel { display: none; }
+    .modes-grid, .arch-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .gov-layout { grid-template-columns: 1fr; }
+    .deploy-grid { grid-template-columns: 1fr 1fr; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(2) { border-right: none; }
+    .stat { padding: 14px 0; border-right: none; border-bottom: 1px solid var(--border); }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Regu<span>Forge</span></div>
+  <ul class="nav-links">
+    <li><a href="#modes">How It Works</a></li>
+    <li><a href="#architecture">Platform</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#governance">AI Governance</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Request Access</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Compliance Signal Feed — Live</div>
+    <h1>Compliance & Integration,<br><em>Unified.</em></h1>
+    <p class="hero-sub">One platform to connect every system, enforce every policy, and prove every audit — with your keys, your rules, and your control.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">Start Free Trial</a>
+      <a href="#modes" class="btn-ghost">See How It Works</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-badges">
+        <span class="badge">SOC 2</span>
+        <span class="badge">ISO 27001</span>
+        <span class="badge">GDPR</span>
+      </div>
+      <div class="trust-divider"></div>
+      <span class="trust-text">Trusted by regulated enterprises globally</span>
+    </div>
+  </div>
+
+  <!-- SIGNAL FEED PANEL -->
+  <div class="signal-panel">
+    <div class="signal-header">
+      <div class="signal-title"><span class="live-dot"></span>Compliance Signal Feed</div>
+      <div class="signal-count">2,847 events/hr</div>
+    </div>
+    <div class="feed-wrap">
+      <div class="feed" id="feed">
+        <div class="feed-item">
+          <span class="feed-time">09:41:02</span>
+          <span class="feed-icon">🔑</span>
+          <div class="feed-body">
+            <div class="feed-label">API key rotated — Salesforce CRM<span class="tag tag-ok">ROTATED</span></div>
+            <div class="feed-meta">vault.salesforce.prod · Policy: 30-day rotation</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:05</span>
+          <span class="feed-icon">🛡️</span>
+          <div class="feed-body">
+            <div class="feed-label">PII detected in data flow<span class="tag tag-warn">MASKED</span></div>
+            <div class="feed-meta">ERP → Warehouse pipeline · Field: customer_email</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:09</span>
+          <span class="feed-icon">🤖</span>
+          <div class="feed-body">
+            <div class="feed-label">AI prompt logged — Claude Sonnet<span class="tag tag-info">AUDIT</span></div>
+            <div class="feed-meta">workflow: contract-review · tokens: 1,247</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:14</span>
+          <span class="feed-icon">⛔</span>
+          <div class="feed-body">
+            <div class="feed-label">Unauthorized access attempt blocked<span class="tag tag-block">BLOCKED</span></div>
+            <div class="feed-meta">IP: 203.0.113.42 · Rule: geo-restriction</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:18</span>
+          <span class="feed-icon">✅</span>
+          <div class="feed-body">
+            <div class="feed-label">HRIS sync completed — Workday<span class="tag tag-ok">SYNCED</span></div>
+            <div class="feed-meta">1,203 records · 0 schema violations</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:23</span>
+          <span class="feed-icon">📋</span>
+          <div class="feed-body">
+            <div class="feed-label">Audit report generated — SOC 2<span class="tag tag-info">REPORT</span></div>
+            <div class="feed-meta">Period: Q2 2026 · Controls: 47/47 passed</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:29</span>
+          <span class="feed-icon">⚡</span>
+          <div class="feed-body">
+            <div class="feed-label">Webhook delivered — Stripe event<span class="tag tag-ok">200 OK</span></div>
+            <div class="feed-meta">payment.succeeded · latency: 42ms</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:33</span>
+          <span class="feed-icon">🔍</span>
+          <div class="feed-body">
+            <div class="feed-label">Risk score elevated — vendor API<span class="tag tag-warn">RISK: 67</span></div>
+            <div class="feed-meta">OpenAI GPT-4o · Unusual token pattern</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:38</span>
+          <span class="feed-icon">🔑</span>
+          <div class="feed-body">
+            <div class="feed-label">Zero-trust auth passed — AWS S3<span class="tag tag-ok">VERIFIED</span></div>
+            <div class="feed-meta">Role: data-pipeline-prod · MFA enforced</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:44</span>
+          <span class="feed-icon">📦</span>
+          <div class="feed-body">
+            <div class="feed-label">New connector deployed — SAP ERP<span class="tag tag-info">CONNECTED</span></div>
+            <div class="feed-meta">Custom legacy adapter · On-prem instance</div>
+          </div>
+        </div>
+        <!-- duplicate for seamless loop -->
+        <div class="feed-item">
+          <span class="feed-time">09:41:02</span>
+          <span class="feed-icon">🔑</span>
+          <div class="feed-body">
+            <div class="feed-label">API key rotated — Salesforce CRM<span class="tag tag-ok">ROTATED</span></div>
+            <div class="feed-meta">vault.salesforce.prod · Policy: 30-day rotation</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:05</span>
+          <span class="feed-icon">🛡️</span>
+          <div class="feed-body">
+            <div class="feed-label">PII detected in data flow<span class="tag tag-warn">MASKED</span></div>
+            <div class="feed-meta">ERP → Warehouse pipeline · Field: customer_email</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:09</span>
+          <span class="feed-icon">🤖</span>
+          <div class="feed-body">
+            <div class="feed-label">AI prompt logged — Claude Sonnet<span class="tag tag-info">AUDIT</span></div>
+            <div class="feed-meta">workflow: contract-review · tokens: 1,247</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:14</span>
+          <span class="feed-icon">⛔</span>
+          <div class="feed-body">
+            <div class="feed-label">Unauthorized access attempt blocked<span class="tag tag-block">BLOCKED</span></div>
+            <div class="feed-meta">IP: 203.0.113.42 · Rule: geo-restriction</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:18</span>
+          <span class="feed-icon">✅</span>
+          <div class="feed-body">
+            <div class="feed-label">HRIS sync completed — Workday<span class="tag tag-ok">SYNCED</span></div>
+            <div class="feed-meta">1,203 records · 0 schema violations</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:23</span>
+          <span class="feed-icon">📋</span>
+          <div class="feed-body">
+            <div class="feed-label">Audit report generated — SOC 2<span class="tag tag-info">REPORT</span></div>
+            <div class="feed-meta">Period: Q2 2026 · Controls: 47/47 passed</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:29</span>
+          <span class="feed-icon">⚡</span>
+          <div class="feed-body">
+            <div class="feed-label">Webhook delivered — Stripe event<span class="tag tag-ok">200 OK</span></div>
+            <div class="feed-meta">payment.succeeded · latency: 42ms</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:33</span>
+          <span class="feed-icon">🔍</span>
+          <div class="feed-body">
+            <div class="feed-label">Risk score elevated — vendor API<span class="tag tag-warn">RISK: 67</span></div>
+            <div class="feed-meta">OpenAI GPT-4o · Unusual token pattern</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:38</span>
+          <span class="feed-icon">🔑</span>
+          <div class="feed-body">
+            <div class="feed-label">Zero-trust auth passed — AWS S3<span class="tag tag-ok">VERIFIED</span></div>
+            <div class="feed-meta">Role: data-pipeline-prod · MFA enforced</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:41:44</span>
+          <span class="feed-icon">📦</span>
+          <div class="feed-body">
+            <div class="feed-label">New connector deployed — SAP ERP<span class="tag tag-info">CONNECTED</span></div>
+            <div class="feed-meta">Custom legacy adapter · On-prem instance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="signal-footer">
+      <div class="conn-count">
+        <div class="conn-dots">
+          <div class="conn-dot"></div>
+          <div class="conn-dot"></div>
+          <div class="conn-dot"></div>
+          <div class="conn-dot"></div>
+        </div>
+        48 active connections
+      </div>
+      <div class="risk-score">RISK SCORE 12 / LOW</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">99.<span>99</span>%</div>
+    <div class="stat-label">Platform uptime SLA</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num"><span>2.4M+</span></div>
+    <div class="stat-label">API calls processed daily</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">200<span>+</span></div>
+    <div class="stat-label">Pre-built connectors</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num"><span>&lt;</span>50ms</div>
+    <div class="stat-label">Median orchestration latency</div>
+  </div>
+</div>
+
+<!-- DELIVERY MODES -->
+<section id="modes">
+  <div class="section-label">Delivery Model</div>
+  <h2 class="section-h">Two Paths Into the Platform</h2>
+  <p class="section-sub">Start self-serve in minutes, or hand off the keys entirely. Most teams begin on the first path and expand to the second as stakes grow.</p>
+
+  <div class="modes-grid">
+    <div class="mode-card primary">
+      <div class="mode-tag">Primary Path</div>
+      <h3>Customer-Managed (Self-Service)</h3>
+      <p>Connect your own tools by pasting existing API keys. The platform handles orchestration, transformation, compliance logging, and credential rotation — you stay in control of every credential.</p>
+      <ul class="mode-features">
+        <li>Secure API key vault with automatic rotation policies</li>
+        <li>OAuth 2.0 + API key support for 200+ connectors</li>
+        <li>Low-code workflow builder or direct REST/GraphQL API access</li>
+        <li>Real-time compliance monitoring and audit evidence</li>
+        <li>Onboard in under 30 minutes, no professional services required</li>
+      </ul>
+      <div class="mode-price">Starting at <strong>$2,500/mo</strong> · Usage-based tiers scale with volume</div>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-tag">High-Ticket Upsell</div>
+      <h3>Managed / Co-Built Mode</h3>
+      <p>Your dedicated account engineers build and operate every integration on your behalf. We provision credentials, build custom connectors for legacy and on-prem systems, and maintain SLAs for the life of the contract.</p>
+      <ul class="mode-features">
+        <li>Fully managed API key provisioning and secure storage</li>
+        <li>Custom connectors for SAP, Oracle, mainframes, legacy SOAP</li>
+        <li>Dedicated instance or full white-label / on-prem delivery</li>
+        <li>Priority SLAs with named customer success manager</li>
+        <li>Audit-ready managed services with quarterly business reviews</li>
+      </ul>
+      <div class="mode-price">From <strong>$5,000/mo</strong> · Enterprise contracts to $30,000+/mo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="arch-section">
+  <div class="section-label">Core Architecture</div>
+  <h2 class="section-h">Built for Enterprise-Grade Integration</h2>
+  <p class="section-sub">A single API surface that abstracts every connected system, enforces every policy, and logs every event — without exposing credentials anywhere in the chain.</p>
+
+  <div class="arch-grid">
+    <div class="arch-cell">
+      <span class="arch-icon">🔗</span>
+      <h4>Unified API Layer</h4>
+      <p>One REST/GraphQL endpoint that abstracts all downstream systems. Your app calls ReguForge; we handle orchestration, transformation, fan-out, and response merging.</p>
+      <span class="arch-code">POST /v1/orchestrate</span>
+    </div>
+    <div class="arch-cell">
+      <span class="arch-icon">🔐</span>
+      <h4>Secure Credential Vault</h4>
+      <p>Enterprise-grade vault with zero-trust access controls. Raw keys never appear in logs, errors, or responses. Rotation policies run automatically on configurable schedules.</p>
+      <span class="arch-code">AES-256 · HSM-backed</span>
+    </div>
+    <div class="arch-cell">
+      <span class="arch-icon">🤖</span>
+      <h4>AI Governance Engine</h4>
+      <p>Monitors every AI model call across your stack — Claude, GPT, Gemini, open-source. Logs prompts, scores risk, detects sensitive data in-flight, and generates supply chain evidence.</p>
+      <span class="arch-code">SBOM · Prompt audit</span>
+    </div>
+    <div class="arch-cell">
+      <span class="arch-icon">📊</span>
+      <h4>Real-Time Compliance</h4>
+      <p>Auto-generates audit evidence for SOC 2, ISO 27001, GDPR, HIPAA, and FedRAMP. Risk scores update continuously; reports export on demand or on a schedule.</p>
+      <span class="arch-code">47 control families</span>
+    </div>
+    <div class="arch-cell">
+      <span class="arch-icon">🧩</span>
+      <h4>Connector Marketplace</h4>
+      <p>200+ pre-built connectors for SaaS, ERP, HRIS, cloud, and AI providers. Customers and partners can publish custom connectors. SDK available for Python, Node.js, Go.</p>
+      <span class="arch-code">npm · pip · go get</span>
+    </div>
+    <div class="arch-cell">
+      <span class="arch-icon">⚡</span>
+      <h4>Webhooks & Extensibility</h4>
+      <p>Emit events from any workflow step to any endpoint. Built-in retry logic, signature verification, and delivery guarantees with full request/response logging.</p>
+      <span class="arch-code">HMAC-SHA256 signed</span>
+    </div>
+  </div>
+</section>
+
+<!-- AI GOVERNANCE -->
+<section id="governance" class="gov-section">
+  <div class="gov-layout">
+    <div>
+      <div class="section-label">AI Governance</div>
+      <h2 class="section-h">Your AI Stack, Under Control</h2>
+      <p class="section-sub">As AI models proliferate across every enterprise workflow, the audit surface explodes. ReguForge brings it back under one roof.</p>
+
+      <div class="gov-list">
+        <div class="gov-item">
+          <span class="gov-num">01</span>
+          <div>
+            <h4>Sensitive Data Detection</h4>
+            <p>Auto-identifies PII, PHI, and financial data flowing through AI prompts and completions before it leaves your perimeter.</p>
+          </div>
+        </div>
+        <div class="gov-item">
+          <span class="gov-num">02</span>
+          <div>
+            <h4>Prompt Log & Chain Audit</h4>
+            <p>Every prompt, every model, every response — immutably logged with token counts, latency, and user attribution for forensic review.</p>
+          </div>
+        </div>
+        <div class="gov-item">
+          <span class="gov-num">03</span>
+          <div>
+            <h4>Supply Chain Integrity</h4>
+            <p>SBOM generation for every AI model in your stack. Know exactly what versions, fine-tunes, and vendors are processing your data.</p>
+          </div>
+        </div>
+        <div class="gov-item">
+          <span class="gov-num">04</span>
+          <div>
+            <h4>Real-Time Risk Scoring</h4>
+            <p>Continuous risk scores across all AI usage patterns. Anomaly detection alerts your team before an auditor finds it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gov-visual">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--teal);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">AI Risk Dashboard · Live</div>
+      <div class="gov-row">
+        <span class="gov-key">Overall risk score</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="gov-bar-wrap"><div class="gov-bar gov-bar-green" style="width:12%;"></div></div>
+          <span class="gov-val" style="color:var(--green);">12 / LOW</span>
+        </div>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">PII exposure risk</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="gov-bar-wrap"><div class="gov-bar gov-bar-warn" style="width:38%;"></div></div>
+          <span class="gov-val" style="color:var(--warn);">38 / MED</span>
+        </div>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">Prompt audit coverage</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="gov-bar-wrap"><div class="gov-bar gov-bar-green" style="width:100%;"></div></div>
+          <span class="gov-val">100%</span>
+        </div>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">Models in SBOM</span>
+        <span class="gov-val">7 verified</span>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">Active AI workflows</span>
+        <span class="gov-val">23</span>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">Tokens processed today</span>
+        <span class="gov-val">4.2M</span>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">Anomalies flagged</span>
+        <span class="gov-val" style="color:var(--warn);">2 · pending review</span>
+      </div>
+      <div class="gov-row">
+        <span class="gov-key">SOC 2 controls passing</span>
+        <span class="gov-val" style="color:var(--green);">47 / 47 ✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOYMENT OPTIONS -->
+<section>
+  <div class="section-label">Deployment</div>
+  <h2 class="section-h">Deploy Where Your Data Lives</h2>
+  <p class="section-sub">From cloud-native multi-tenant to air-gapped on-prem — every enterprise constraint has a matching deployment model.</p>
+
+  <div class="deploy-grid">
+    <div class="deploy-card">
+      <div class="deploy-icon">☁️</div>
+      <h4>Multi-Tenant Cloud</h4>
+      <p>Instant provisioning, automatic updates, shared infrastructure with full data isolation. Fastest path to production.</p>
+    </div>
+    <div class="deploy-card">
+      <div class="deploy-icon">🏢</div>
+      <h4>Dedicated Cloud Instance</h4>
+      <p>Your own isolated environment in AWS, GCP, or Azure. Separate compute, storage, and network — no noisy neighbors.</p>
+    </div>
+    <div class="deploy-card">
+      <div class="deploy-icon">🔀</div>
+      <h4>Hybrid</h4>
+      <p>Control plane in cloud, data plane on your infrastructure. Sensitive data never leaves your network; management stays simple.</p>
+    </div>
+    <div class="deploy-card">
+      <div class="deploy-icon">🔒</div>
+      <h4>On-Premises / Air-Gapped</h4>
+      <p>Full self-hosted deployment for defense, finance, and regulated industries. No outbound connections required.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing-section">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-h">Contracts That Scale With Your Stack</h2>
+  <p class="section-sub">Every tier includes the full platform — no features gated behind support tickets. Upgrade when your connections or compliance needs grow.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Tier 1</div>
+      <h3>Starter Enterprise</h3>
+      <div class="price-amount">
+        <span class="amount">$2,500</span><span class="period"> / month</span>
+      </div>
+      <div class="price-note">Annual commitment · billed monthly</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span>Up to 50 active connections</li>
+        <li><span class="check">✓</span>Full API key vault + rotation</li>
+        <li><span class="check">✓</span>Basic compliance dashboards (SOC 2, GDPR)</li>
+        <li><span class="check">✓</span>Unified REST/GraphQL API</li>
+        <li><span class="check">✓</span>Webhook delivery with retry</li>
+        <li><span class="check">✓</span>200+ pre-built connectors</li>
+        <li><span class="check">✓</span>Email + chat support</li>
+        <li class="muted-feat"><span class="check">–</span>AI governance engine</li>
+        <li class="muted-feat"><span class="check">–</span>Managed integrations</li>
+      </ul>
+      <a href="#" class="price-btn price-btn-ghost">Start Free Trial</a>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-tier">Tier 2</div>
+      <h3>Growth</h3>
+      <div class="price-amount">
+        <span class="amount">$9,000</span><span class="period"> / month</span>
+      </div>
+      <div class="price-note">$6k–$12k range based on volume</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span>Unlimited connections</li>
+        <li><span class="check">✓</span>Advanced AI governance engine</li>
+        <li><span class="check">✓</span>Full compliance suite — SOC 2, ISO 27001, HIPAA, GDPR</li>
+        <li><span class="check">✓</span>Real-time risk scoring + anomaly detection</li>
+        <li><span class="check">✓</span>Prompt audit logs + SBOM</li>
+        <li><span class="check">✓</span>Dedicated cloud instance option</li>
+        <li><span class="check">✓</span>Priority support + 99.9% SLA</li>
+        <li><span class="check">✓</span>Python, Node.js, Go SDKs</li>
+      </ul>
+      <a href="#" class="price-btn price-btn-primary">Request Access</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-tier">Tier 3</div>
+      <h3>Premium Managed</h3>
+      <div class="price-amount">
+        <span class="amount">$20,000</span><span class="period"> / month</span>
+      </div>
+      <div class="price-note">$15k–$30k+ · custom contracts available</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span>Everything in Growth</li>
+        <li><span class="check">✓</span>Fully managed integrations — we build and operate</li>
+        <li><span class="check">✓</span>Custom connectors for legacy / on-prem / mainframe</li>
+        <li><span class="check">✓</span>On-prem or air-gapped deployment</li>
+        <li><span class="check">✓</span>White-label option</li>
+        <li><span class="check">✓</span>Named customer success manager</li>
+        <li><span class="check">✓</span>99.99% SLA + priority incident response</li>
+        <li><span class="check">✓</span>Quarterly business reviews</li>
+      </ul>
+      <a href="#" class="price-btn price-btn-ghost">Talk to Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label">Get Started</div>
+  <h2 class="section-h">Your Compliance Burden Ends Here</h2>
+  <p class="section-sub">Connect your first system in under 30 minutes. No professional services required to start — upgrade to managed when you're ready.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-primary">Start Free Trial</a>
+    <a href="#" class="btn-ghost">Schedule a Demo</a>
+  </div>
+  <p class="cta-note">No credit card required for trial · SOC 2 Type II certified · Data never leaves your vault</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Regu<span>Forge</span></div>
+  <div class="footer-links">
+    <a href="#">Documentation</a>
+    <a href="#">Status</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 ReguForge. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
